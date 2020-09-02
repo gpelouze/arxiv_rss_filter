@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+import argparse
 import re
 
 import feedparser
 import jinja2
+import yaml
 
 
 def get_feed(feed):
@@ -31,16 +33,32 @@ def filter_feed(rss):
     return rss
 
 
-def write_feed(rss, output, template_src='arxiv_rss_template.xml.j2'):
+def render_feed(rss, template_src='arxiv_rss_template.xml.j2'):
     with open(template_src) as f:
         template = jinja2.Template(f.read())
-    with open(output, 'w') as f:
-        f.write(template.render(**rss))
+    return template.render(**rss)
+
+
+def write_feed(xml, output):
+    if output is not None:
+        with open(output, 'w') as f:
+            f.write(xml)
+    else:
+        print(xml)
 
 
 if __name__ == '__main__':
 
-    # rss = get_feed('http://export.arxiv.org/rss/astro-ph.SR')
-    rss = get_feed('dev/feed_in.xml')
+    p = argparse.ArgumentParser(prog='arxiv_rss_filter')
+    p.add_argument('-c', default='arxiv_rss_filter_config.yml',
+                   help='Config file (default: arxiv_rss_filter_config.yml)')
+    p.add_argument('-o', help='Output file (default: write to stdout)')
+    args = p.parse_args()
+
+    with open(args.c) as f:
+        config = yaml.safe_load(f)
+
+    rss = get_feed(config['source'])
     rss = filter_feed(rss)
-    write_feed(rss, 'dev/feed_out.xml')
+    xml = render_feed(rss)
+    write_feed(xml, args.o)
