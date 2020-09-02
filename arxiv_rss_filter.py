@@ -72,8 +72,8 @@ if __name__ == '__main__':
     script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
     if args.config is None:
         args.config = os.path.join(script_dir, 'config.yml')
-    if args.config is None:
-        args.config = os.path.join(script_dir, 'feed.rss')
+    if args.output is None:
+        args.output = os.path.join(script_dir, 'feed.rss')
     args.template = os.path.join(script_dir, 'template.xml.j2')
 
     with open(args.config) as f:
