@@ -35,7 +35,6 @@ def filter_feed(rss, config):
         rss.entries[i] = entry
 
     # Author and keyword includes
-    filtered_entries = []
     authors_include = config['authors_include']
     keywords_include = [kw.lower() for kw in config['keywords_include']]
     for entry in rss.entries:
@@ -43,14 +42,13 @@ def filter_feed(rss, config):
         for a in authors_include:
             if a in entry.authors:
                 entry.filter_matches.append(a)
-                filtered_entries.append(entry)
         for kw in keywords_include:
             if (kw in entry.title) or (kw in entry.description):
                 entry.filter_matches.append(kw)
-                filtered_entries.append(entry)
         if entry.filter_matches:
             entry.title += ' [{}]'.format(', '.join(entry.filter_matches))
-    rss['entries'] = filtered_entries  # assigning rss.entries doesn't work
+        entry.rank = len(entry.filter_matches)
+    rss['entries'] = list(filter(lambda e: e.rank > 0, rss.entries))
 
     return rss
 
