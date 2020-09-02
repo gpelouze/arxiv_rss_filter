@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import re
+
 import feedparser
 import jinja2
 
@@ -9,6 +11,23 @@ def get_feed(feed):
 
 
 def filter_feed(rss):
+
+    # Cosmetic filtering
+    title_regex = re.compile(
+        r'^(?P<title>.*)\. '
+        r'\((?P<id>arXiv:[\d.v]+) '
+        r'\[(?P<category>[\w\.-]+)\](?P<extra>.*)\)$')
+    for i, entry in enumerate(rss.entries):
+        m = title_regex.match(entry.title)
+        if m:
+            entry.title = m.group('title')
+            entry.description += ('<p>'
+                                  '{id} [{category}] {extra}'
+                                  '</p>').format(**m.groupdict())
+        pdf_link = re.sub(r'\/abs\/', '/pdf/', entry.link)
+        entry.description += f'<p>[<a href="{pdf_link}">PDF</a>]</p>'
+        rss.entries[i] = entry
+
     return rss
 
 
