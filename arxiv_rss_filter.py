@@ -14,7 +14,7 @@ def get_feed(feed):
     return feedparser.parse(feed)
 
 
-def filter_feed(rss, config):
+def filter_feed(rss, config, args):
 
     # Cosmetic filtering
     title_regex = re.compile(
@@ -48,7 +48,10 @@ def filter_feed(rss, config):
         if entry.filter_matches:
             entry.title += ' [{}]'.format(', '.join(entry.filter_matches))
         entry.rank = len(entry.filter_matches)
-    rss['entries'] = list(filter(lambda e: e.rank > 0, rss.entries))
+    if args.sort:
+        rss['entries'] = sorted(rss.entries, key=lambda e: e.rank, reverse=True)
+    else:
+        rss['entries'] = list(filter(lambda e: e.rank > 0, rss.entries))
 
     return rss
 
@@ -71,6 +74,8 @@ if __name__ == '__main__':
                    help='Config file (default: <script_dir>/config.yml)')
     p.add_argument('-o', '--output',
                    help='Output file (default: <script_dir>/feed.rss)')
+    p.add_argument('--sort', action='store_true',
+                   help='Sort the entries instead of filtering them')
     args = p.parse_args()
     script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
     if args.config is None:
@@ -83,6 +88,6 @@ if __name__ == '__main__':
         config = yaml.safe_load(f)
 
     rss = get_feed(config['source'])
-    rss = filter_feed(rss, config)
+    rss = filter_feed(rss, config, args)
     xml = render_feed(rss, template=args.template)
     write_feed(xml, args.output)
