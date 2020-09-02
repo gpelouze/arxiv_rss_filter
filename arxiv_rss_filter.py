@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import re
+import sys
 
 import feedparser
 import jinja2
@@ -46,8 +48,8 @@ def filter_feed(rss, config):
     return rss
 
 
-def render_feed(rss, template_src='template.xml.j2'):
-    with open(template_src) as f:
+def render_feed(rss, template):
+    with open(template) as f:
         template = jinja2.Template(f.read())
     return template.render(**rss)
 
@@ -67,11 +69,15 @@ if __name__ == '__main__':
                    help='Config file (default: config.yml)')
     p.add_argument('-o', help='Output file (default: write to stdout)')
     args = p.parse_args()
+    args.template = os.path.join(
+        os.path.dirname(os.path.realpath(sys.argv[0])),
+        'template.xml.j2')
+    args.o = os.path.expanduser(args.o)
 
     with open(args.c) as f:
         config = yaml.safe_load(f)
 
     rss = get_feed(config['source'])
     rss = filter_feed(rss, config)
-    xml = render_feed(rss)
+    xml = render_feed(rss, template=args.template)
     write_feed(xml, args.o)
