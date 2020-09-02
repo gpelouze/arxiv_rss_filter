@@ -46,7 +46,7 @@ def filter_feed(rss, config):
     return rss
 
 
-def render_feed(rss, template_src='arxiv_rss_template.xml.j2'):
+def render_feed(rss, template_src='template.xml.j2'):
     with open(template_src) as f:
         template = jinja2.Template(f.read())
     return template.render(**rss)
@@ -63,8 +63,8 @@ def write_feed(xml, output):
 if __name__ == '__main__':
 
     p = argparse.ArgumentParser(prog='arxiv_rss_filter')
-    p.add_argument('-c', default='arxiv_rss_filter_config.yml',
-                   help='Config file (default: arxiv_rss_filter_config.yml)')
+    p.add_argument('-c', default='config.yml',
+                   help='Config file (default: config.yml)')
     p.add_argument('-o', help='Output file (default: write to stdout)')
     args = p.parse_args()
 
