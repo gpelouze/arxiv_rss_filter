@@ -55,11 +55,8 @@ def render_feed(rss, template):
 
 
 def write_feed(xml, output):
-    if output is not None:
-        with open(output, 'w') as f:
-            f.write(xml)
-    else:
-        print(xml)
+    with open(output, 'w') as f:
+        f.write(xml)
 
 
 if __name__ == '__main__':
@@ -67,12 +64,12 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(prog='arxiv_rss_filter')
     p.add_argument('-c', default='config.yml',
                    help='Config file (default: config.yml)')
-    p.add_argument('-o', help='Output file (default: write to stdout)')
+    p.add_argument('-o', default='arxiv_filtered.xml',
+                   help='Output file (default: arxiv_filtered.xml)')
     args = p.parse_args()
     args.template = os.path.join(
         os.path.dirname(os.path.realpath(sys.argv[0])),
         'template.xml.j2')
-    args.o = os.path.expanduser(args.o)
 
     with open(args.c) as f:
         config = yaml.safe_load(f)
