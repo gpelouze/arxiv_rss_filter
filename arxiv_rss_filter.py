@@ -66,12 +66,14 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(prog='arxiv_rss_filter')
     p.add_argument('-c', '--config',
                    help='Config file (default: <script_dir>/config.yml)')
-    p.add_argument('-o', '--output', default='arxiv_filtered.xml',
-                   help='Output file (default: arxiv_filtered.xml)')
+    p.add_argument('-o', '--output',
+                   help='Output file (default: <script_dir>/feed.rss)')
     args = p.parse_args()
     script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
     if args.config is None:
         args.config = os.path.join(script_dir, 'config.yml')
+    if args.config is None:
+        args.config = os.path.join(script_dir, 'feed.rss')
     args.template = os.path.join(script_dir, 'template.xml.j2')
 
     with open(args.config) as f:

@@ -16,18 +16,18 @@ is assumed to be cloned to `/srv/http/arxiv_rss_filter`.
 12 4 * * * /srv/http/arxiv_rss_filter/arxiv_rss_filter.py
 ~~~
 
-3. Optionally, protect every file except the output `arxiv_filtered.xml`. Eg with Apache:
+3. Optionally, protect every file except the output `feed.rss`. Eg with Apache:
 
 ~~~apache
 <Directory "/srv/http/arxiv_rss_filter" >
-    <Files "arxiv_filtered.xml" >
+    <Files "feed.rss" >
         Require all granted
     </Files>
     Require all denied
 </Directory>
 ~~~
 
-4. Add `https://your_server.example/arxiv_rss_filter/arxiv_filtered.xml` to
+4. Add `https://your_server.example/arxiv_rss_filter/feed.rss` to
    your feed reader.
 
 
