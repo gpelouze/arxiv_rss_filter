@@ -12,7 +12,7 @@ def get_feed(feed):
     return feedparser.parse(feed)
 
 
-def filter_feed(rss):
+def filter_feed(rss, config):
 
     # Cosmetic filtering
     title_regex = re.compile(
@@ -29,6 +29,19 @@ def filter_feed(rss):
         pdf_link = re.sub(r'\/abs\/', '/pdf/', entry.link)
         entry.description += f'<p>[<a href="{pdf_link}">PDF</a>]</p>'
         rss.entries[i] = entry
+
+    # Author and keyword includes
+    filtered_entries = []
+    authors_include = config['authors_include']
+    keywords_include = [kw.lower() for kw in config['keywords_include']]
+    for entry in rss.entries:
+        for a in authors_include:
+            if a in entry.authors:
+                filtered_entries.append(entry)
+        for kw in keywords_include:
+            if (kw in entry.title) or (kw in entry.description):
+                filtered_entries.append(entry)
+    rss['entries'] = filtered_entries  # assigning rss.entries doesn't work
 
     return rss
 
@@ -59,6 +72,6 @@ if __name__ == '__main__':
         config = yaml.safe_load(f)
 
     rss = get_feed(config['source'])
-    rss = filter_feed(rss)
+    rss = filter_feed(rss, config)
     xml = render_feed(rss)
     write_feed(xml, args.o)

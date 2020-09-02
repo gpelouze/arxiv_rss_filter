@@ -1,1 +1,10 @@
 source : http://export.arxiv.org/rss/astro-ph.SR
+
+authors_include:
+  - Secchi
+  - Parker
+
+keywords_include:
+  - sun
+  - chromosphere
+  - corona
