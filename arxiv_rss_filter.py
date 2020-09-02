@@ -29,7 +29,9 @@ def filter_feed(rss, config):
                                   '{id} [{category}] {extra}'
                                   '</p>').format(**m.groupdict())
         pdf_link = re.sub(r'\/abs\/', '/pdf/', entry.link)
-        entry.description += f'<p>[<a href="{pdf_link}">PDF</a>]</p>'
+        entry.description += ('<p>'
+                              '[<a href="{pdf_link}">PDF</a>]'
+                              '</p>').format(**locals())
         rss.entries[i] = entry
 
     # Author and keyword includes
