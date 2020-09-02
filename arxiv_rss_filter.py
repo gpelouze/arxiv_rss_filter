@@ -62,20 +62,20 @@ def write_feed(xml, output):
 if __name__ == '__main__':
 
     p = argparse.ArgumentParser(prog='arxiv_rss_filter')
-    p.add_argument('-c',
+    p.add_argument('-c', '--config',
                    help='Config file (default: <script_dir>/config.yml)')
-    p.add_argument('-o', default='arxiv_filtered.xml',
+    p.add_argument('-o', '--output', default='arxiv_filtered.xml',
                    help='Output file (default: arxiv_filtered.xml)')
     args = p.parse_args()
     script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
-    if args.c is None:
-        args.c = os.path.join(script_dir, 'config.yml')
+    if args.config is None:
+        args.config = os.path.join(script_dir, 'config.yml')
     args.template = os.path.join(script_dir, 'template.xml.j2')
 
-    with open(args.c) as f:
+    with open(args.config) as f:
         config = yaml.safe_load(f)
 
     rss = get_feed(config['source'])
     rss = filter_feed(rss, config)
     xml = render_feed(rss, template=args.template)
-    write_feed(xml, args.o)
+    write_feed(xml, args.output)
