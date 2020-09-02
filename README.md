@@ -4,7 +4,7 @@
 *Filter arXiv RSS feed by keywords and authors.*
 
 
-# Installation
+## Installation
 
 1. Clone the current repository to an HTTP server with Python 3, [feedparser],
 [Jinja2], and [PyYAML] installed (we assume `/srv/http/arxiv_rss_filter` in the
@@ -35,7 +35,7 @@ following instructions).
    your feed reader.
 
 
-# Configuration
+## Configuration
 
 The script’s configuration is stored in `config.yml`, and contains the
 following entries:
@@ -47,3 +47,9 @@ following entries:
 
 The script keeps an arXiv entry if at least one included author is in its
 author list, or if one included keyword is in the title or in the abstract.
+
+
+## Licence
+
+This script is released under a MIT open source licence. See
+[`LICENSE.txt`](LICENSE.txt).
