@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:syn="http://purl.org/rss/1.0/modules/syndication/"
+ xmlns:admin="http://webns.net/mvcb/"
+>
+
+<channel rdf:about="{{ feed.link }}">
+<title>{{ feed.title }}</title>
+<link>{{ feed.link}}</link>
+<description rdf:parseType="Literal">{{ feed.description }}</description>
+<dc:language>{{ feed.language }}</dc:language>
+<dc:date>{{ feed.date }}</dc:date>
+<dc:publisher>{{ feed.publisher }}</dc:publisher>
+{% for tag in feed.tags -%}
+<dc:subject>{{ tag.term }}</dc:subject>
+{% endfor -%}
+<syn:updateBase>{{ feed.sy_updatebase }}</syn:updateBase>
+<syn:updateFrequency>{{ feed.sy_updatefrequency }}</syn:updateFrequency>
+<syn:updatePeriod>{{ feed.sy_updateperiod }}</syn:updatePeriod>
+<items>
+ <rdf:Seq>
+  {% for entry in entries -%}
+  <rdf:li rdf:resource="{{ entry.id }}" />
+  {% endfor -%}
+ </rdf:Seq>
+</items>
+<image rdf:resource="http://arxiv.org/icons/sfx.gif" />
+</channel>
+<image rdf:about="http://arxiv.org/icons/sfx.gif">
+<title>arXiv.org</title>
+<url>http://arxiv.org/icons/sfx.gif</url>
+<link>http://arxiv.org/</link>
+</image>
+{% for entry in entries -%}
+<item rdf:about="{{ entry.id }}">
+<title>{{ entry.title }}</title>
+<link>{{ entry.link }}</link>
+<description rdf:parseType="Literal">{{ entry.description|e }}
+</description>
+<dc:creator>{{ entry.author|e }}</dc:creator>
+</item>
+{% endfor -%}
+</rdf:RDF>
