@@ -11,22 +11,22 @@
 >
 
 <channel rdf:about="{{ feed.link }}">
-<title>{{ feed.title }}</title>
-<link>{{ feed.link}}</link>
-<description rdf:parseType="Literal">{{ feed.description }}</description>
-<dc:language>{{ feed.language }}</dc:language>
-<dc:date>{{ feed.date }}</dc:date>
-<dc:publisher>{{ feed.publisher }}</dc:publisher>
+<title>{{ feed.title|e }}</title>
+<link>{{ feed.link|e }}</link>
+<description rdf:parseType="Literal">{{ feed.description|e }}</description>
+<dc:language>{{ feed.language|e }}</dc:language>
+<dc:date>{{ feed.date|e }}</dc:date>
+<dc:publisher>{{ feed.publisher|e }}</dc:publisher>
 {% for tag in feed.tags -%}
-<dc:subject>{{ tag.term }}</dc:subject>
+<dc:subject>{{ tag.term|e }}</dc:subject>
 {% endfor -%}
-<syn:updateBase>{{ feed.sy_updatebase }}</syn:updateBase>
-<syn:updateFrequency>{{ feed.sy_updatefrequency }}</syn:updateFrequency>
-<syn:updatePeriod>{{ feed.sy_updateperiod }}</syn:updatePeriod>
+<syn:updateBase>{{ feed.sy_updatebase|e }}</syn:updateBase>
+<syn:updateFrequency>{{ feed.sy_updatefrequency|e }}</syn:updateFrequency>
+<syn:updatePeriod>{{ feed.sy_updateperiod|e }}</syn:updatePeriod>
 <items>
  <rdf:Seq>
   {% for entry in entries -%}
-  <rdf:li rdf:resource="{{ entry.id }}" />
+  <rdf:li rdf:resource="{{ entry.id|e }}" />
   {% endfor -%}
  </rdf:Seq>
 </items>
@@ -38,9 +38,9 @@
 <link>http://arxiv.org/</link>
 </image>
 {% for entry in entries -%}
-<item rdf:about="{{ entry.id }}">
-<title>{{ entry.title }}</title>
-<link>{{ entry.link }}</link>
+<item rdf:about="{{ entry.id|e }}">
+<title>{{ entry.title|e }}</title>
+<link>{{ entry.link|e }}</link>
 <description rdf:parseType="Literal">{{ entry.description|e }}
 </description>
 <dc:creator>{{ entry.author|e }}</dc:creator>
