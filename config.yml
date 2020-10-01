@@ -9,3 +9,6 @@ keywords_include:
   - chromosphere
   - corona
   - SDO
+
+keywords_exclude:
+  - exoplanet

@@ -45,9 +45,12 @@ following entries:
   (eg. <http://export.arxiv.org/rss/astro-ph.SR>),
 - `authors_include`: list of authors,
 - `keywords_include`: list of keywords.
+- `keywords_exclude`: list of excluding keywords.
 
 The script keeps an arXiv entry if at least one included author is in its
 author list, or if one included keyword is in the title or in the abstract.
+Entries containing excluded keywords are always removed (even when containing
+included keywords or authors).
 
 Case insensitive matching is applied for lower case keywords. Case sensitive
 matching for keywords containing at least an upper case character.

@@ -37,8 +37,10 @@ def filter_feed(rss, config, args):
     # Author and keyword includes
     authors_include = config['authors_include']
     keywords_include = [kw for kw in config['keywords_include']]
+    keywords_exclude = [kw for kw in config['keywords_exclude']]
     for entry in rss.entries:
         entry.filter_matches = []
+        entry.filter_exclude_matches = []
         for a in authors_include:
             if a in entry.authors:
                 entry.filter_matches.append(a)
@@ -49,9 +51,27 @@ def filter_feed(rss, config, args):
                 this_kw_search_text = kw_search_text.lower()
             if kw in this_kw_search_text:
                 entry.filter_matches.append(kw)
+        for kw in keywords_exclude:
+            this_kw_search_text = kw_search_text
+            if kw.islower():
+                this_kw_search_text = kw_search_text.lower()
+            if kw in this_kw_search_text:
+                entry.filter_exclude_matches.append(kw)
         if entry.filter_matches:
-            entry.title += ' [{}]'.format(', '.join(entry.filter_matches))
+            kw_title = ' [{}]'.format(', '.join(entry.filter_matches))
+            entry.title += kw_title
+        if entry.filter_exclude_matches:
+            kw_title = ' >{}<'.format(', '.join(entry.filter_exclude_matches))
+            entry.title += kw_title
         entry.rank = len(entry.filter_matches)
+        if len(entry.filter_exclude_matches) > 0:
+            entry.rank = -1
+        if entry.rank < 0:
+            entry.title = "❌ " + entry.title
+        elif entry.rank == 0:
+            entry.title = "❔ " + entry.title
+        elif entry.rank > 0:
+            entry.title = "✅ " + entry.title
     if args.sort:
         rss['entries'] = sorted(rss.entries, key=lambda e: e.rank, reverse=True)
     else:
