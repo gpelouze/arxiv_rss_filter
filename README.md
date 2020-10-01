@@ -49,6 +49,9 @@ following entries:
 The script keeps an arXiv entry if at least one included author is in its
 author list, or if one included keyword is in the title or in the abstract.
 
+Case insensitive matching is applied for lower case keywords. Case sensitive
+matching for keywords containing at least an upper case character.
+
 It is also possible to sort the entries instead of filtering them (eg. to make
 sure your filters don’t drop interesting entries).
 To do so, run `arxiv_rss_filter.py --sort`.

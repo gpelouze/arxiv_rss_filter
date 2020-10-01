@@ -36,14 +36,18 @@ def filter_feed(rss, config, args):
 
     # Author and keyword includes
     authors_include = config['authors_include']
-    keywords_include = [kw.lower() for kw in config['keywords_include']]
+    keywords_include = [kw for kw in config['keywords_include']]
     for entry in rss.entries:
         entry.filter_matches = []
         for a in authors_include:
             if a in entry.authors:
                 entry.filter_matches.append(a)
+        kw_search_text = entry.title + " " + entry.description
         for kw in keywords_include:
-            if (kw in entry.title) or (kw in entry.description):
+            this_kw_search_text = kw_search_text
+            if kw.islower():
+                this_kw_search_text = kw_search_text.lower()
+            if kw in this_kw_search_text:
                 entry.filter_matches.append(kw)
         if entry.filter_matches:
             entry.title += ' [{}]'.format(', '.join(entry.filter_matches))
