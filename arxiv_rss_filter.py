@@ -58,11 +58,11 @@ def filter_feed(rss, config, args):
             if kw in this_kw_search_text:
                 entry.filter_exclude_matches.append(kw)
         if entry.filter_matches:
-            kw_title = ' [{}]'.format(', '.join(entry.filter_matches))
-            entry.title += kw_title
+            kw_title = '[{}] '.format(', '.join(entry.filter_matches))
+            entry.title = kw_title + entry.title
         if entry.filter_exclude_matches:
-            kw_title = ' >{}<'.format(', '.join(entry.filter_exclude_matches))
-            entry.title += kw_title
+            kw_title = '>{}< '.format(', '.join(entry.filter_exclude_matches))
+            entry.title = kw_title + entry.title
 
         entry.rank = (len(entry.filter_matches)
                       - len(entry.filter_exclude_matches))
