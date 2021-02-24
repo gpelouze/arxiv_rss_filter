@@ -63,16 +63,19 @@ def filter_feed(rss, config, args):
         if entry.filter_exclude_matches:
             kw_title = ' >{}<'.format(', '.join(entry.filter_exclude_matches))
             entry.title += kw_title
+
         entry.rank = (len(entry.filter_matches)
                       - len(entry.filter_exclude_matches))
-        if len(entry.filter_exclude_matches) > 0:
-            entry.rank = -1
-        if entry.rank < 0:
-            entry.title = "❌ " + entry.title
-        elif entry.rank == 0:
-            entry.title = "❔ " + entry.title
-        elif entry.rank > 0:
+
+        matches_includes = (len(entry.filter_matches) > 0)
+        matches_excludes = (len(entry.filter_exclude_matches) > 0)
+        if matches_includes and not matches_excludes:
             entry.title = "✅ " + entry.title
+        elif matches_excludes and not matches_includes:
+            entry.title = "❌ " + entry.title
+        else:
+            entry.title = "❔ " + entry.title
+
     if args.sort:
         rss['entries'] = sorted(rss.entries, key=lambda e: e.rank, reverse=True)
     else:
