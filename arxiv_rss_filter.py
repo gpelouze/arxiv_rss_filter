@@ -63,7 +63,8 @@ def filter_feed(rss, config, args):
         if entry.filter_exclude_matches:
             kw_title = ' >{}<'.format(', '.join(entry.filter_exclude_matches))
             entry.title += kw_title
-        entry.rank = len(entry.filter_matches)
+        entry.rank = (len(entry.filter_matches)
+                      - len(entry.filter_exclude_matches))
         if len(entry.filter_exclude_matches) > 0:
             entry.rank = -1
         if entry.rank < 0:
